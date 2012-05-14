@@ -57,6 +57,7 @@ class Connection {
 	 * @author Kelly Becker
 	 */
 	public function update($collection, $conditions, $array, $opts = array()) {
+		
 		/**
 		 * Emulate SQL Update if need be
 		 */
@@ -75,6 +76,13 @@ class Connection {
 	 */
 	public function remove($collection, $conditions, $opts = array()) {
 		return $this->connection->$collection->remove($conditions, $opts);
+	}
+
+	/**
+	 * Load a Model object for Mongo
+	 */
+	public function model($collection, $conditions = false) {
+		return new Model($collection, $conditions, $this);
 	}
 
 	/**

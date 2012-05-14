@@ -28,4 +28,8 @@ class Bundle {
 		return self::$instances[$slug] = new Connection($dsn);
 	}
 
+	public function __get($var) {
+		return $this->__callBundle($var);
+	}
+
 }
