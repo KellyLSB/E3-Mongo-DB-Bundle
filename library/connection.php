@@ -93,4 +93,12 @@ class Connection {
 		return call_user_func_array(array($this->connection, $func), $args);
 	}
 
+	/**
+	 * Run a manual function on the MongoDB Instance
+	 * @author Kelly Becker
+	 */
+	public function __get($val) {
+		return $this->connection->$val;
+	}
+
 }

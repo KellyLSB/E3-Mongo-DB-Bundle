@@ -10,11 +10,12 @@ use e;
  */
 class Model {
 
+	private $_new = true;
+
 	private $_collection;
 	private $_connection;
 	private $_condition;
 
-	private $_treeStack = array();
 	private $_data = array();
 
 	public function __construct($collection, $condition = false, $connection) {
@@ -45,6 +46,11 @@ class Model {
 		 * Set the data to the object
 		 */
 		$this->_data = $result;
+
+		/**
+		 * Since we have data this is not a new object
+		 */
+		$this->_new = false;
 	}
 
 	public function save($array = false, $safe = false, $opts = array()) {
@@ -61,27 +67,34 @@ class Model {
 		if(empty($this->_data)) return false;
 
 		/**
+		 * Set timestamps
+		 */
+		if($this->_new) $this->_data['created_timestamp'] = date('Y-m-d H:i:s');
+		$this->_data['updated_timestamp'] = date('Y-m-d H:i:s');
+
+		/**
 		 * If safe insert safe
 		 */
 		if($safe) $opts['safe'] = true;
-		return $this->_connection->insert($this->_collection, $array, $opts);
+
+		/**
+		 * Upsert the record
+		 */
+		$opts['upsert'] = true;
+		$result = $this->_connection->update($this->_collection, $this->_condition, $this->_data, $opts);
+		$this->_new = false;
+		return $result;
 	}
 
 	/**
 	 * Get a var and climb the data tree
 	 */
 	public function __get($var) {
-		if(!isset($this->_data[$var]));
-			return null;
+		if($var === '_id' && isset($this->_data['_id']))
+			return (string) $this->_data['_id'];
 
-		if(is_array($this->_data[$var])) {
-			$array = $this->_treeStack;
-			array_push($array, $var);
-
-			return $this->__getTree($array);
-		}
-
-		else return $this->_data[$var];
+		if(isset($this->_data[$var]))
+			return $this->_data[$var];
 	}
 
 	/**
@@ -100,28 +113,10 @@ class Model {
 	}
 
 	/**
-	 * Climb the data tree
+	 * Return the data array
 	 */
-	private function __getTree($array = array()) {
-
-		$data = $this->_data;
-		foreach($array as $r) {
-			if(!isset($data[$r])) {
-				$this->_treeStack = array();
-				return null;
-			}
-
-			$data = $data[$r];
-		}
-
-		if(!is_array($data)) {
-			$this->_treeStack = array();
-			return $data;
-		}
-
-		$this->_treeStack = $array;
-
-		return $this;
+	public function __toArray() {
+		return $this->_data;
 	}
 
 }
