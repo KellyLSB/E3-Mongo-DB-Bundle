@@ -58,8 +58,9 @@ class Model {
 		/**
 		 * Merge in the data
 		 */
-		if(!empty($array) && is_array($array))
-			$this->_data = e\array_merge_recursive_simple($this->_data, $array);
+		if(!empty($array) && is_array($array)) foreach($array as $var => $val) {
+			$this->$var = $val;
+		}
 
 		/**
 		 * If there is no data to save stop trying
@@ -93,7 +94,7 @@ class Model {
 		if($var === '_id' && isset($this->_data['_id']))
 			return (string) $this->_data['_id'];
 
-		if(isset($this->_data[$var]))
+		if(array_key_exists($var, $this->_data))
 			return $this->_data[$var];
 	}
 
@@ -102,10 +103,9 @@ class Model {
 	 */
 	public function __set($var, $val) {
 
-		if(is_array($val)) {
-			$val = array($var => $val);
-			$this->_data = e\array_merge_recursive_simple($this->_data, $val);
-			return true;
+		if(array_key_exists($var, $this->_data)) {
+			if(is_array($this->_data[$var]) && is_array($val))
+				return $this->_data[$var] = e\array_merge_recursive_simple($this->_data[$var], $val);
 		}
 
 		$this->_data[$var] = $val;
