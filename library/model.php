@@ -34,7 +34,7 @@ class Model {
 		/**
 		 * Fetch the results
 		 */
-		$result = $this->_connection->find($collection, $condition);
+		$result = $this->_connection->find($collection, $condition)->limit(1)->getNext();
 
 		/**
 		 * If the result is not an array then return
