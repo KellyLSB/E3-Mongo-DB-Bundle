@@ -38,6 +38,11 @@ class Bundle {
 	public function _on_environmentLoad($env) {
 
 		/**
+		 * Trace environment load
+		 */
+		e\trace("Loading mongo environment config.");
+
+		/**
 		 * Heroku Mongo Providers
 		 */
 		$herokuProviders = array(
@@ -74,6 +79,11 @@ class Bundle {
 
 		if(!isset(self::$instances['default']))
 			return false;
+
+		/**
+		 * Trace environment save
+		 */
+		e\trace("Saving mongo environment config.");
 
 		/**
 		 * Load the model and return the environment
