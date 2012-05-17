@@ -41,7 +41,8 @@ class Bundle {
 		 * Instantiate MongoDB
 		 */
 		if(isset($env['mongodb.default.connection']))
-			self::$instances[$slug] = new Connection($env['mongodb.default.connection']);
+			self::$instances['default'] = new Connection($env['mongodb.default.connection']);
+		else return false;
 
 		/**
 		 * Load the model and return the environment
@@ -54,6 +55,9 @@ class Bundle {
 	 * Save the Environment From MongoDB
 	 */
 	public function _on_environmentSave($array = array()) {
+
+		if(!isset(self::$instances['default']))
+			return false;
 
 		/**
 		 * Load the model and return the environment
