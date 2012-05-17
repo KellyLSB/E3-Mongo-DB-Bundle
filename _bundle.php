@@ -47,7 +47,7 @@ class Bundle {
 		/**
 		 * Load the model and return the environment
 		 */
-		$env = $this->default->model('_environment', array('env' => 1));
+		$env = $this->default->model('_environment', array('@env' => 1));
 		return $env->__toArray();
 	}
 
@@ -62,9 +62,12 @@ class Bundle {
 		/**
 		 * Load the model and return the environment
 		 */
-		$env = $this->default->model('_environment', array('env' => 1));
+		$array['@env'] = 1;
+		$env = $this->default->model('_environment', array('@env' => 1));
 		$env->save($array, true);
-		return $env->__toArray();
+		$array = $env->__toArray();
+		unset($array['@env']);
+		return $array;
 	}
 
 }
