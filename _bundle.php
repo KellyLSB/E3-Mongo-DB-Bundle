@@ -48,7 +48,9 @@ class Bundle {
 		 * Load the model and return the environment
 		 */
 		$env = $this->default->model('_environment', array('@env' => 1));
-		return $env->__toArray();
+		$array = $env->__toArray();
+		unset($array['@env']);
+		return $array;
 	}
 
 	/**
