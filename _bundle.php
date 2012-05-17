@@ -41,9 +41,9 @@ class Bundle {
 		 * Heroku Mongo Providers
 		 */
 		$herokuProviders = array(
-			getenv('MONGO_URI'),
-			getenv('MONGOHQ_URI'),
-			getenv('MONGOLAB_URI')
+			$_SERVER['MONGO_URI'],
+			$_SERVER['MONGOHQ_URI'],
+			$_SERVER['MONGOLAB_URI']
 		);
 
 		foreach($herokuProviders as $provider) if(!empty($provider))
@@ -52,10 +52,10 @@ class Bundle {
 		/**
 		 * Instantiate MongoDB
 		 */
-		if(isset($env['mongodb.default.connection']))
-			self::$instances['default'] = new Connection($env['mongodb.default.connection']);
-		else if(isset($herokuProvider))
+		if(isset($herokuProvider))
 			self::$instances['default'] = new Connection($herokuProvider);
+		else if(isset($env['mongodb.default.connection']))
+			self::$instances['default'] = new Connection($env['mongodb.default.connection']);
 		else return false;
 
 		/**
