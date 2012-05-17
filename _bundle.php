@@ -49,7 +49,7 @@ class Bundle {
 		 */
 		$env = $this->default->model('_environment', array('@env' => 1));
 		$array = $env->__toArray();
-		unset($array['@env']);
+		unset($array['@env'], $array['_id']);
 		return $array;
 	}
 
@@ -68,7 +68,7 @@ class Bundle {
 		$env = $this->default->model('_environment', array('@env' => 1));
 		$env->save($array, true);
 		$array = $env->__toArray();
-		unset($array['@env']);
+		unset($array['@env'], $array['_id']);
 		return $array;
 	}
 
