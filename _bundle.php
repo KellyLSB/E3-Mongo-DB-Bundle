@@ -52,10 +52,10 @@ class Bundle {
 		/**
 		 * Instantiate MongoDB
 		 */
-		if(isset($herokuProvider))
-			self::$instances['default'] = new Connection($herokuProvider);
-		else if(isset($env['mongodb.default.connection']))
+		if(isset($env['mongodb.default.connection']))
 			self::$instances['default'] = new Connection($env['mongodb.default.connection']);
+		else if(isset($herokuProvider))
+			self::$instances['default'] = new Connection($herokuProvider);
 		else return false;
 
 		/**
