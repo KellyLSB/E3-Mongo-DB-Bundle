@@ -32,4 +32,35 @@ class Bundle {
 		return $this->__callBundle($var);
 	}
 
+	/**
+	 * Load the Environment From MongoDB
+	 */
+	public function _on_environmentLoad($env) {
+
+		/**
+		 * Instantiate MongoDB
+		 */
+		if(isset($env['mongodb.default.connection']))
+			self::$instances[$slug] = new Connection($env['mongodb.default.connection']);
+
+		/**
+		 * Load the model and return the environment
+		 */
+		$env = $this->default->model('$_environment', array('env' => 1));
+		return $env->__toArray();
+	}
+
+	/**
+	 * Save the Environment From MongoDB
+	 */
+	public function _on_environmentSave($array = array(), true) {
+
+		/**
+		 * Load the model and return the environment
+		 */
+		$env = $this->default->model('$_environment', array('env' => 1));
+		$env->save($array);
+		return $env->__toArray();
+	}
+
 }
