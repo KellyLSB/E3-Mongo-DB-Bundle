@@ -38,9 +38,23 @@ class Bundle {
 	public function _on_environmentLoad($env) {
 
 		/**
+		 * Heroku Mongo Defaults
+		 */
+		$herokuProviders = array(
+			getenv('MONGO_URI'),
+			getenv('MONGOHQ_URI'),
+			getenv('MONGOLAB_URI')
+		);
+
+		foreach($herokuProviders as $provider) if(!empty($provider))
+			$herokuProvider = $provider;
+
+		/**
 		 * Instantiate MongoDB
 		 */
-		if(isset($env['mongodb.default.connection']))
+		if(isset($herokuProvider))
+			self::$instances['default'] = new Connection($herokuProvider);
+		else if(isset($env['mongodb.default.connection']))
 			self::$instances['default'] = new Connection($env['mongodb.default.connection']);
 		else return false;
 
