@@ -38,7 +38,7 @@ class Bundle {
 	public function _on_environmentLoad($env) {
 
 		/**
-		 * Heroku Mongo Defaults
+		 * Heroku Mongo Providers
 		 */
 		$herokuProviders = array(
 			getenv('MONGO_URI'),
