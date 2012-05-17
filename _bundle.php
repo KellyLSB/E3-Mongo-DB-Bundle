@@ -53,13 +53,13 @@ class Bundle {
 	/**
 	 * Save the Environment From MongoDB
 	 */
-	public function _on_environmentSave($array = array(), true) {
+	public function _on_environmentSave($array = array()) {
 
 		/**
 		 * Load the model and return the environment
 		 */
 		$env = $this->default->model('$_environment', array('env' => 1));
-		$env->save($array);
+		$env->save($array, true);
 		return $env->__toArray();
 	}
 
