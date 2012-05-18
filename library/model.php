@@ -81,8 +81,17 @@ class Model {
 		/**
 		 * Upsert the record
 		 */
-		$opts['upsert'] = true;
-		$result = $this->_connection->update($this->_collection, $this->_condition, $this->_data, $opts);
+		if(empty($this->_id)) $result = $this->_connection->insert($this->_collection, $this->_data, $opts);
+		else $result = $this->_connection->update($this->_collection, $this->_condition, $this->_data, $opts);
+
+		/**
+		 * If any data was passed back append it to the string and set the id as a condition
+		 */
+		if(isset($result['_data'])) {
+			$this->_data = $result['_data'];
+			$this->_condition = array('_id' => $this->_data['_id']);
+		}
+
 		$this->_new = false;
 		return $result;
 	}

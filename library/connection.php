@@ -39,7 +39,22 @@ class Connection {
 	 * @author Kelly Becker
 	 */
 	public function insert($collection, $array, $opts = array()) {
-		return $this->connection->$collection->insert($array, $opts);
+
+		/**
+		 * Run Query
+		 */
+		$result = $this->connection->$collection->insert($array, $opts);
+
+		/**
+		 * If the result is empty append the data
+		 */
+		if(empty($result)) $result = array();
+
+		/**
+		 * Append the modified array to the result data
+		 */
+		$result['_data'] = $array;
+		return $result;
 	}
 
 	/**
