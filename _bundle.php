@@ -12,6 +12,10 @@ class Bundle {
 	 */
 	private static $instances = array();
 
+	public function _on_framework_loaded() {
+		e::configure('manage')->activeAddKey('bundle', __NAMESPACE__, 'mongodb');
+	}
+
 	/**
 	 * Get a new DB Instance
 	 * @author Kelly Becker
