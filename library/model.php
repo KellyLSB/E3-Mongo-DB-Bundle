@@ -81,7 +81,7 @@ class Model {
 		/**
 		 * Upsert the record
 		 */
-		if(empty($this->_id)) $result = $this->_connection->insert($this->_collection, $this->_data, $opts);
+		if(empty($this->_data['_id'])) $result = $this->_connection->insert($this->_collection, $this->_data, $opts);
 		else $result = $this->_connection->update($this->_collection, $this->_condition, $this->_data, $opts);
 
 		/**
@@ -119,6 +119,15 @@ class Model {
 
 		$this->_data[$var] = $val;
 		return true;
+	}
+
+	/**
+	 * Run isset on the array
+	 */
+	public function __isset($var) {
+		if(isset($this->_data[$var]))
+			return true;
+		else return false;
 	}
 
 	/**
