@@ -73,6 +73,15 @@ class Bundle {
 		$env = $this->default->model('_environment', array('@env' => 1));
 		$array = $env->__toArray();
 		unset($array['@env'], $array['_id']);
+
+		/**
+		 * Switch | to .
+		 */
+		foreach($array as $key => $val) {
+			$array[str_replace('|', '.', $key)] = $val;
+			unset($array[$key]);
+		}
+
 		return $array;
 	}
 
@@ -88,6 +97,14 @@ class Bundle {
 		 * Trace environment save
 		 */
 		e\trace("Saving mongo environment config.");
+
+		/**
+		 * Switch . to |
+		 */
+		foreach($array as $key => $val) {
+			$array[str_replace('.', '|', $key)] = $val;
+			unset($array[$key]);
+		}
 
 		/**
 		 * Load the model and return the environment
