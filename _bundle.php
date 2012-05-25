@@ -78,6 +78,9 @@ class Bundle {
 		 * Switch | to .
 		 */
 		foreach($array as $key => $val) {
+			if(strpos($key, '|') === false)
+				continue;
+
 			$array[str_replace('|', '.', $key)] = $val;
 			unset($array[$key]);
 		}
