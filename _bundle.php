@@ -21,19 +21,27 @@ class Bundle {
 	 * @author Kelly Becker
 	 */
 	public function __callBundle($slug = 'default') {
+
 		if(isset(self::$instances[$slug]))
 			return self::$instances[$slug];
 
-		$dsn = e::$environment->requireVar(
-			"mongodb.$slug.connection",
-			'mongodb://username[:password]@hostname[:port]/database'
-		);
+		$dsn = $this->isAvailable();
 
 		return self::$instances[$slug] = new Connection($dsn);
 	}
 
 	public function __get($var) {
 		return $this->__callBundle($var);
+	}
+
+	public function isAvailable() {
+		$dsn = e::$environment->requireVar(
+			"mongodb.$slug.connection",
+			'mongodb://username[:password]@hostname[:port]/database'
+		);
+
+		if(empty($dsn)) return false;
+		else return $dsn;
 	}
 
 	/**

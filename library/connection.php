@@ -20,7 +20,7 @@ class Connection {
 	 * @author Kelly Becker
 	 */
 	public function __construct($dsn = false) {
-		if(!$dsn) throw new Exception("No DSN provided to connect to Mongo");
+		if(!$dsn) throw new Exception("No DSN provided to MongoDB");
 
 		/**
 		 * Make sure the Mongo Class exists
