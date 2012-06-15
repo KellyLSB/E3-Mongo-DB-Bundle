@@ -80,7 +80,14 @@ class Bundle {
 		 */
 		$env = $this->default->model('_environment', array('@env' => 1));
 		$array = $env->__toArray();
-		unset($array['@env'], $array['_id']);
+
+		/**
+		 * Clean out DB Vars
+		 */
+		unset($array['@env'], $array['_id'],
+			$array['created_timestamp'],
+			$array['updated_timetstamp']
+		);
 
 		/**
 		 * Switch | to .
