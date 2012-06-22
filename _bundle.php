@@ -86,7 +86,7 @@ class Bundle {
 		 */
 		unset($array['@env'], $array['_id'],
 			$array['created_timestamp'],
-			$array['updated_timetstamp']
+			$array['updated_timestamp']
 		);
 
 		/**
