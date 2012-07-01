@@ -21,11 +21,10 @@ class Bundle {
 	 * @author Kelly Becker
 	 */
 	public function __callBundle($slug = 'default') {
-
 		if(isset(self::$instances[$slug]))
 			return self::$instances[$slug];
 
-		$dsn = $this->isAvailable();
+		$dsn = $this->isAvailable($slug);
 
 		return self::$instances[$slug] = new Connection($dsn);
 	}
@@ -34,7 +33,7 @@ class Bundle {
 		return $this->__callBundle($var);
 	}
 
-	public function isAvailable() {
+	public function isAvailable($slug = 'default') {
 		$dsn = e::$environment->requireVar(
 			"mongodb.$slug.connection",
 			'mongodb://username[:password]@hostname[:port]/database'
