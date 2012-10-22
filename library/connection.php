@@ -96,8 +96,9 @@ class Connection {
 	/**
 	 * Load a Model object for Mongo
 	 */
-	public function model($collection, $conditions = false) {
-		return new Model($collection, $conditions, $this);
+	public function model($collection, $conditions = false, $opts = array()) {
+		if(is_string($opts)) $opts = array($opts => true);
+		return new Model($collection, $conditions, $this, $opts);
 	}
 
 	/**

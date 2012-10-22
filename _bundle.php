@@ -14,6 +14,7 @@ class Bundle {
 
 	public function _on_framework_loaded() {
 		e::configure('manage')->activeAddKey('bundle', __NAMESPACE__, 'mongodb');
+		ini_set('mongo.allow_empty_keys', 1);
 	}
 
 	/**

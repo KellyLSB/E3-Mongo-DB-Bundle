@@ -15,12 +15,14 @@ class Model {
 	private $_collection;
 	private $_connection;
 	private $_condition;
+	private $_opts = array();
 
 	private $_data = array();
 
-	public function __construct($collection, $condition = false, $connection) {
+	public function __construct($collection, $condition = false, $connection, $opts = array()) {
 		$this->_collection = $collection;
 		$this->_connection = $connection;
+		$this->_opts = $opts;
 
 		/**
 		 * If the condition does not exist or is not an array
@@ -36,6 +38,11 @@ class Model {
 		 * Fetch the results
 		 */
 		$result = $this->_connection->find($collection, $condition)->limit(1)->getNext();
+
+		/**
+		 * If serialized object unserialize
+		 */
+		if(is_array($result) && !empty($opts['serialize'])) $result['data'] = unserialize($result['data']);
 
 		/**
 		 * If the result is not an array then return
@@ -63,6 +70,14 @@ class Model {
 		}
 
 		/**
+		 * Set object if one exists
+		 */
+		elseif(is_object($array) && !empty($this->_opts['serialize']))
+			$this->_data['data'] = serialize($array);
+		elseif(is_object($array))
+			$this->_data['data'] = $array;
+
+		/**
 		 * If there is no data to save stop trying
 		 */
 		if(empty($this->_data)) return false;
@@ -72,6 +87,13 @@ class Model {
 		 */
 		if($this->_new) $this->_data['created_timestamp'] = date('Y-m-d H:i:s');
 		$this->_data['updated_timestamp'] = date('Y-m-d H:i:s');
+
+		/**
+		 * If new and condition was specified add it
+		 */
+		if($this->_new && !empty($this->_condition)) foreach($this->_condition as $cond => $val) {
+			$this->_data[$cond] = $val;
+		}
 
 		/**
 		 * If safe insert safe
@@ -94,6 +116,12 @@ class Model {
 
 		$this->_new = false;
 		return $result;
+	}
+
+	public function __empty() {
+		if($this->_new) return true;
+		if(empty($this->_data)) return true;
+		return false;
 	}
 
 	/**
