@@ -70,12 +70,18 @@ class Model {
 		}
 
 		/**
-		 * Set object if one exists
+		 * Set object if one was passed
 		 */
 		elseif(is_object($array) && !empty($this->_opts['serialize']))
 			$this->_data['data'] = serialize($array);
 		elseif(is_object($array))
 			$this->_data['data'] = $array;
+
+		/**
+		 * If data object was passed and was are asked to serialize
+		 */
+		if(is_object($this->_data['data']) && !empty($this->_opts['serialize']))
+			$this->_data['data'] = serialize($this->_data['data']);
 
 		/**
 		 * If there is no data to save stop trying
