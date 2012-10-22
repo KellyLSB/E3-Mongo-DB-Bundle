@@ -29,7 +29,7 @@ class Connection {
 			throw new Exception("The MongoDB PECL extension has not been installed or enabled");
 
 		$dbname = array_pop(explode('/', $dsn));
-		$this->connection = new Mongo($dsn, array("persist" => "x"));
+		$this->connection = new Mongo($dsn);
 		$this->connection = $this->connection->$dbname;
 	}
 
